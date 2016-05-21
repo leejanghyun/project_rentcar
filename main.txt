@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <title>Game_1</title>
+        <style type="text/css"> 
+            #icon{
+            position: absolute;
+                left: 600;
+                top: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            
+                <img align="center" id="icon" border = "0" src="main.car.jpg">
+        </center>
+        <br><br><br><br>
+        <form align ="right" name="loginform" method="post">
+            <img align ="center" border = "0" src="id.jpg" >
+            <input type="text" name="id" size="8">
+            <img align ="center" border = "0" src="pw.jpg" >
+            <input type="password" name="pwd" size="8">
+            <input type="submit"  src="loginimg.jpg" style="background-color:black; height: 25px; width: 70px; font-size:30; font-family:Times New Roman; color:white;" value="·Î±×ÀÎ">&nbsp;&nbsp;&nbsp;
+        </form>
+     
+        <center>
+        <table width = "1000" height ="50" align="center">
+            <tr>
+                <td><a href="join.html"><img src="bar_1.jpg" width="420" height="70" border="0"></a></td>
+                <td><a href="reserve.html"><img src="bar_2.jpg" width="420" height="70" border="0"></a></td>
+                <td><a href="rent.html"><img src="bar_3.jpg" width="420" height="70" border="0"></a></td>
+                <td><a href="question.html"><img src="bar_4.jpg" width="420" height="70" border="0"></a></td>
+            </tr>
+        </table>
+            <br>
+            <img align ="center" border = "0" src="main.car2.jpg" width="1000" height="580">
+        </center>
+         
+    </body>
+</html>
