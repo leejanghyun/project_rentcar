@@ -1,5 +1,5 @@
 #include "Common.h"
-
+#include "DataBase.h"
 WSADATA wsaData;
 SOCKET Servsock,Clntsock;
 SOCKADDR_IN servAdr,clntAdr;
@@ -9,7 +9,9 @@ char method[MAX_SIZE];
 char ct[MIN_SIZE];
 char fileName[MIN_SIZE];
 char First_Header[MAX_SIZE];/////첫번쨰 헤더 자를떄 (첫줄)
-string Image;
+char Image[MIN_SIZE];
+char Data[MAX_SIZE];
+char* IP;
 
 void SendData(SOCKET sock,char* reply,char* fileName){
 	
@@ -37,23 +39,25 @@ void SendData(SOCKET sock,char* reply,char* fileName){
 			if(readCnt<sizeof(buf)){
 				if(feof(sendFile)!=0){
 					send(sock,buf,sizeof(buf),0);
+					break;
 				}
-				break;
 			}
 			send(sock,buf,sizeof(buf),0);
 		}
 	}
-	//closesocket(sock);
+	closesocket(sock);
 }
 
 unsigned WINAPI RequestThread(void* arg){
 	SOCKET Clntsock=(SOCKET)arg;
 	char recvData[MAX_SIZE];
-
-	recv(Clntsock,recvData,MAX_SIZE,0);
-
-	printf("%s",recvData);
+	int len=0;
+		
+	len=recv(Clntsock,recvData,MAX_SIZE,0);
+	recvData[len]=0;
 	
+	printf("%s",recvData);
+	strcpy(Data,recvData);
 
 	if(strstr(recvData,"HTTP/")==NULL || strstr(recvData,"main.html")==NULL)  ///먼저 클라이언트 메시지가 HTTP프로토콜인지 확인+main을 통하지 않으면 error뜨게
 	{ERRORMESSAGE(Clntsock);
@@ -62,23 +66,27 @@ unsigned WINAPI RequestThread(void* arg){
 	}
 
 	strcpy(First_Header,strtok(recvData,"\r\n"));/////1번째 헤더문을 잘랐습니다.
-	
+
 	Parsing_Image(First_Header);
 		
 	if(!strcmp(method,"GET")){////GET
-		
-		SendData(Clntsock,ct,fileName);
-
+		if(strstr(Image,".jpg")!=NULL|| strstr(Image,".png")!=NULL){
+			SendData(Clntsock,ct,Image);
+		}
+		else{
+		    SendData(Clntsock,ct,fileName);
+		}
 	}
 	else{////POST
-
+		 Parsing_for_join(Clntsock,ct,Data);
+		 SendData(Clntsock,ct,fileName);
 	}
 	
 	return 0;
 }
 
 int main(){
- 
+
   if(WSAStartup(MAKEWORD(2,2),&wsaData)!=0){
 	  printf("WSAStartup error");
   }
@@ -97,6 +105,8 @@ int main(){
 	  clntSZ=sizeof(clntAdr);
 	  Clntsock=accept(Servsock,(SOCKADDR*)&clntAdr,&clntSZ);
 	  printf("client enter......:%s:%d\n",inet_ntoa(clntAdr.sin_addr),ntohs(clntAdr.sin_port)); ///클라이언트 주소+포트
+	  IP=new char[100];
+	  strcpy(IP,inet_ntoa(clntAdr.sin_addr));////클라이언트 IP저장
 	  (HANDLE)_beginthreadex(NULL,0,RequestThread,(void*)Clntsock,0,(unsigned*)&ThreadID);
   }
   closesocket(Servsock);
