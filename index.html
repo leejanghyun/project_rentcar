@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <style type="text/css">
+     </style>
+        <script type="text/javascript">
+            function divDrag(target, e){
+               var oldParentId = target.parentElement.id;
+                e.dataTransfer.setData('oldParentId',oldParentId);
+                e.dataTransfer.setData('target',target.id);
+            };
+            
+            function divDrop(target, e){
+                var targetId = e.dataTransfer.getData('target');
+                var oldParentId = e.dataTransfer.getData('oldParentId');
+                
+                target.parentElement.appendChild(document.getElementById(targetId));
+                document.getElementById(oldParentId).appendChild(document.getElementById(target.id));
+            };
+            
+        </script>
+    </head>
+    <body background="C:\html_img/mainback5.png">
+      <table >
+            <tr>
+                <td><a href="mainpage.html"><img src="C:\html_img/bar_1.jpg" width="420" height="70" border="0"></a></td>    
+          </tr>
+        </table>
+    <!-- <button class="btn" id="btn" type="submit"><img class="btn-img" src="C:\html_img/mainback5.png"></button>-->
+
+        
+        
+    <!--
+        <table border="1">
+            <tr>
+                <td id="td3"><img draggable="true" id="a3" ondragstart="divDrag(this, event);" ondrop="divDrop(this, event);" ondragenter="return false;" ondragover="return false;" src ="C:\html_img/signup2.png" alt="img">
+                </td>
+                
+                <td id="td2"><img draggable="true" id="a2" ondragstart="divDrag(this, event);" ondrop="divDrop(this, event);" ondragenter="return false;" ondragover="return false;" src ="C:\html_img/signup3.png" alt="img">    
+                </td>
+            </tr>
+        </table>
+    -->
+    </body>
+</html>
+
+
