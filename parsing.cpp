@@ -1,20 +1,48 @@
 
-void Parsing_for_chat(SOCKET Clntsock,char* ct,char* Data,char* IP,char* id){
-	MYSQL* conn_ptr=NULL; // mysql 과의 연결 담당
+
+void Parsing_for_join(SOCKET Clntsock,char* ct,char* message, char* IP){
+	char identify[MIN_SIZE];
+	char id[MIN_SIZE];
+	char pw[MIN_SIZE];
+	char Query[MIN_SIZE]="";
+	int ok=0;
+    MYSQL* conn_ptr=NULL; // mysql 과의 연결 담당
     MYSQL_RES* res=NULL; // 쿼리 결과 받는 변수
     MYSQL_ROW row; //쿼리에 대한 실제 데이터 값이 들어있는 변수
-	char Query[MAX_SIZE]="INSERT INTO `rentcar`.`question` (`ID` ,`Q`) VALUES ('";
-	char Question[MIN_SIZE]="";
-	char message[MIN_SIZE]="";
-	strcpy(message,strstr(Data,"chat"));
-	strcpy(Question,message+5);
 
 	initMYSQL(&conn_ptr);
-	strcat(Query,id);
-	strcat(Query,"','");
-	strcat(Query,Question);
-	strcat(Query,"' )");
-	mysql_query(conn_ptr, Query);//////////////////DV에 send로 보낸 메시지 ID와 Question 저장
 
-	question_html(Clntsock,ct,id,1);
+	strcpy(identify,strstr(message,"identify"));
+	strtok(identify,"=");
+	strcpy(id,strtok(NULL,"&"));////(id)&pw=(pw)
+	strtok(NULL,"=");//(id)저장
+	strcpy(pw,strtok(NULL,"="));//(pw)저장
+	
+	mysql_query(conn_ptr, Query1);
+	res = mysql_store_result(conn_ptr); 
+
+	while ((row=mysql_fetch_row(res))!=NULL)
+	{///동일한게 없으면 ok
+			if(!strcmp(id,row[1])){
+				ok=1;
+				break;
+			}
+	}
+
+	if(!ok){
+		////데이터 베이스에저장
+		strcat(Query,"INSERT INTO `rentcar`.`customer` (`IP` ,`ID` ,`PW` ,`login` ) VALUES ( '");
+		strcat(Query,IP);
+		strcat(Query,"', '");
+		strcat(Query,id);
+		strcat(Query,"', '");
+		strcat(Query,pw);
+		strcat(Query,"', '0' )");
+		mysql_query(conn_ptr, Query);
+		SendData(Clntsock,ct,"main.html");	//////메인페이지로 이동
+	}
+	else{
+		SendData(Clntsock,ct,"index2.html");	//////다시 회원가입페이지로 이동
+	}
+
 }
