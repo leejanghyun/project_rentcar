@@ -1,0 +1,1 @@
+void initMYSQL(MYSQL** conn_ptr);

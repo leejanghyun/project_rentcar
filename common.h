@@ -10,9 +10,9 @@ using namespace std;
 #include "DataBase.h"
 #include "Cookie.h"
 #include "html.h"
-#define CONTENT_SIZE 5000
+#define CONTENT_SIZE 10000
 #define MAX_SIZE 2048
-#define HTML 10000
+#define HTML 5000
 #define MIN_SIZE 300
 #define SIZE 1000
 
@@ -34,5 +34,9 @@ extern void SendData(SOCKET sock,char* reply,char* fileName);
 static char Query1[QUERY_LEN]="select * from customer ";  //////È®ÀÎ Äõ¸®
 static char Query2[QUERY_LEN]="update customer set login='";  ////º¯°æÄõ¸®
 static char Query3[QUERY_LEN]="update customer set IP='";  ////º¯°æÄõ¸®
+static char Query4[QUERY_LEN]="select * from rent ";
+static char Query5[QUERY_LEN]="select * from question";
+static char Query6[QUERY_LEN]="alter question auto_increment=0";
+
 
 
